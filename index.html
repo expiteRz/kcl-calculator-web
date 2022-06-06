@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" class="has-navbar-fixed-top">
+
+<head>
+    <meta name=”viewport” content=”width=device-width,initial-scale=1.0″>
+    <meta charset="utf-8">
+    <title>KCL Calculator</title>
+    <link rel="stylesheet" href="assets/css/bulma.min.css">
+    <link rel="stylesheet" href="assets/css/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="/assets/css/animate.min.css">
+    <style>
+        body {
+            margin: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container is-max-desktop">
+    <div class="box">
+        <h1 class="title">KCL Calculator</h1>
+        <div class="columns">
+            <div class="column">
+                <div class="field is-horizontal">
+                    <div class="field-label is-normal">
+                        <label class="label">Result</label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field has-addons">
+                            <div class="control">
+                                <input type="text" class="input" placeholder="Result" value="0000" id="result_all"
+                                       disabled>
+                            </div>
+                            <div class="control">
+                                <button class="button is-link" id="copy_result_all"><i class="fa-solid fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="field is-horizontal">
+                    <div class="field-label is-normal">
+                        <label class="label">Variant</label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field has-addons">
+                            <div class="control">
+                                <input type="text" class="input" placeholder="Variant" value="000" id="result_variant"
+                                       disabled>
+                            </div>
+                            <div class="control">
+                                <button class="button is-link" id="copy_result_variant"><i class="fa-solid fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="columns">
+            <div class="column">
+                <div class="field">
+                    <label class="label">Collision Type</label>
+                    <div class="control">
+                        <div class="select is-rounded">
+                            <select id="collision_type">
+                                <option value="0x00">Road</option>
+                                <option value="0x01">Slippery Road 1</option>
+                                <option value="0x02">Weak Off-road</option>
+                                <option value="0x03">Off-road</option>
+                                <option value="0x04">Heavy Off-road</option>
+                                <option value="0x05">Slippery Road 2</option>
+                                <option value="0x06">Boost Panel</option>
+                                <option value="0x07">Boost Ramp</option>
+                                <option value="0x08">Jump Pad</option>
+                                <option value="0x09">Item Road</option>
+                                <option value="0x0a">Solid Fall</option>
+                                <option value="0x0b">Moving Road</option>
+                                <option value="0x0c">Wall</option>
+                                <option value="0x0d">Invisible Wall</option>
+                                <option value="0x0e">Item Wall</option>
+                                <option value="0x0f">Wall 3</option>
+                                <option value="0x10">Fall Boundary</option>
+                                <option value="0x11">Cannon Activator</option>
+                                <option value="0x12">Force Recalculation</option>
+                                <option value="0x13">Half-pipe Ramp</option>
+                                <option value="0x14">Wall</option>
+                                <option value="0x15">Moving Road</option>
+                                <option value="0x16">Gravity Road</option>
+                                <option value="0x17">Road</option>
+                                <option value="0x18">Sound Trigger</option>
+                                <option value="0x19">Weak Wall</option>
+                                <option value="0x1a">Effect Trigger</option>
+                                <option value="0x1b">Item State Modifier</option>
+                                <option value="0x1c">Half-pipe Invisible Wall</option>
+                                <option value="0x1d">Moving Road</option>
+                                <option value="0x1e">Special Wall</option>
+                                <option value="0x1f">Wall 5</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="field">
+                    <label class="label">Effect Type</label>
+                    <div class="control">
+                        <div class="select is-rounded">
+                            <select id="effect_type">
+                                <option value="0x00">Unknown</option>
+                                <option value="0x01">Unknown</option>
+                                <option value="0x02">Unknown</option>
+                                <option value="0x03">Unknown</option>
+                                <option value="0x04">Unknown</option>
+                                <option value="0x05">Unknown</option>
+                                <option value="0x06">Unknown</option>
+                                <option value="0x07">Unknown</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="field">
+                    <label class="label">Shadow</label>
+                    <div class="control">
+                        <div class="select is-rounded">
+                            <select id="shadow_type">
+                                <option value="0x00">0</option>
+                                <option value="0x01">1</option>
+                                <option value="0x02">2</option>
+                                <option value="0x03">3</option>
+                                <option value="0x04">4</option>
+                                <option value="0x05">5</option>
+                                <option value="0x06">6</option>
+                                <option value="0x07">7</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="field">
+                    <label class="label">Intensity</label>
+                    <div class="control">
+                        <div class="select is-rounded">
+                            <select id="intensity_type">
+                                <option value="0x00">0</option>
+                                <option value="0x01">1</option>
+                                <option value="0x02">2</option>
+                                <option value="0x03">3</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="field">
+                    <label class="label">Tricks</label>
+                    <p class="control">
+                        <label class="checkbox">
+                            <input type="checkbox" id="trick_0">
+                            Trickable
+                        </label>
+                    </p>
+                    <p class="control">
+                        <label class="checkbox">
+                            <input type="checkbox" id="trick_1">
+                            Undrivable
+                        </label>
+                    </p>
+                    <p class="control">
+                        <label class="checkbox">
+                            <input type="checkbox" id="trick_2">
+                            Wall
+                        </label>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="navbar is-fixed-top">
+    <a href="https://rz-public.xyz" target="_blank" class="button m-2" id="home_button">
+        <i class="fa-solid fa-angles-left"></i></a>
+</div>
+<script src="assets/js/jquery-3.6.0.min.js" type="text/javascript"></script>
+<script src="assets/js/all.js" type="text/javascript"></script>
+<script src="assets/js/val.js" type="text/javascript"></script>
+<script src="assets/js/bulma-toast.min.js" type="text/javascript"></script>
+</body>
+
+</html>
