@@ -1,6 +1,6 @@
 # kcl-calculator-web
 
-A simple web application that allows to calculates [collision flag](https://wiki.tockdom.com/wiki/KCL_Flags) for Mario Kart Wii, and rewritten as web application version for [KCL Calculator](https://github.com/expiteRz/kcl-calculator)
+A simple tool that allows to calculates [collision flag](https://wiki.tockdom.com/wiki/KCL_Flags) for Mario Kart Wii, and rewritten as a web application for [KCL Calculator](https://github.com/expiteRz/kcl-calculator)
 
 ## Credits
 
