@@ -32,19 +32,9 @@ const copy_to_clipboard = v => {
             navigator.clipboard.writeText(v)
         }
     } catch (e) {
-        bulmaToast.toast({
-            message: `Something went wrong. ${e}}`,
-            type: "is-danger",
-            position: "top-center",
-            animate: {in: "fadeInDown", out: "fadeOut"}
-        })
+        bulma_alert("is-danger", `Something went wrong. ${e}}`)
     } finally {
-        bulmaToast.toast({
-            message: "Value copied successfully!",
-            type: "is-success",
-            position: "top-center",
-            animate: {in: "fadeInDown", out: "fadeOut"}
-        })
+        bulma_alert("is-success", `Value copied successfully!`)
     }
 }
 
@@ -127,4 +117,19 @@ const calc_variant = () => {
     }
 
     return r
+}
+
+/**
+ * Display alert using Bulma component
+ * @param {string} c Color (e.g.: is-primary)
+ * @param {string} m Message
+ * @param {string} p Position (It's nullable)
+ */
+const bulma_alert = (c, m, p = "top-center") => {
+    bulmaToast.toast({
+        message: m,
+        type: c,
+        position: p,
+        animate: {in: "fadeInDown", out: "fadeOut"}
+    })
 }
