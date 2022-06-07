@@ -8,3 +8,4 @@ A simple tool that allows to calculate [collision flag](https://wiki.tockdom.com
 - [jQuery](https://jquery.com) for JavaScript experience supports
 - [Bulma](https://bulma.io) for visual
 - [bulma-toast](https://github.com/rfoel/bulma-toast) for displaying toast with Bulma
+- [bulma-tooltip](https://github.com/CreativeBulma/bulma-tooltip) for display text hovering on button with Bulma
