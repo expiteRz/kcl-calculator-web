@@ -1,1 +1,0 @@
-body{margin:1rem}[data-tooltip]:not(.is-disabled).rz-tooltip-multiline-support:before,[data-tooltip]:not(.is-loading).rz-tooltip-multiline-support:before,[data-tooltip]:not([disabled]).rz-tooltip-multiline-support:before{max-width:10rem;width:10rem}
