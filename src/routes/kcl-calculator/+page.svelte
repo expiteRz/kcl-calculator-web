@@ -1,22 +1,28 @@
 <script lang="ts">
     import Fa from 'svelte-fa';
-    import { faCopy, faChevronDown } from '@fortawesome/free-solid-svg-icons';
+    import {
+        faCopy,
+        faChevronDown,
+        faChevronLeft,
+        faChevronRight
+    } from '@fortawesome/free-solid-svg-icons';
     import CopyToClipboard from '../../CopyToClipboard.svelte';
 
     const app_version = APP_VERSION;
 
-    let result: Number = 0;
+    let result: number = 0;
+    let base_type: number = 0;
+    let variant_total: number = 0;
     let variant: number = 0;
+    let shadow: number = 0;
+    let intensity: number = 0;
 
-    let base_type = 'Road';
-    let variant_type = 'Normal';
+    let base_type_label = 'Road';
+    let variant_type_label = 'Normal';
 
     async function copy_to_clipboard() {
         if (navigator.clipboard) {
-            let output = document.querySelector('.area_output')!;
-            return await navigator.clipboard.writeText(
-                output.textContent != null ? output.textContent! : '0000'
-            );
+            return await navigator.clipboard.writeText(result.toString(16).padStart(4, '0'));
         }
 
         const app = new CopyToClipboard({
@@ -24,6 +30,37 @@
             props: { result: result.toString(16).padStart(4, '0') }
         });
         app.$destroy();
+    }
+
+    function calc_shadow(flag: string) {
+        switch (flag) {
+            case '+':
+                shadow += shadow < 7 ? 1 : 0;
+                break;
+            case '-':
+                shadow -= shadow > 0 ? 1 : 0;
+            default:
+                break;
+        }
+        calc_result();
+    }
+
+    function calc_intensity(flag: string) {
+        switch (flag) {
+            case '+':
+                intensity += intensity < 3 ? 1 : 0;
+                break;
+            case '-':
+                intensity -= intensity > 0 ? 1 : 0;
+            default:
+                break;
+        }
+        calc_result();
+    }
+
+    function calc_result() {
+        result = (intensity << 11) | (shadow << 8) | (variant << 5) | base_type;
+        variant_total = (intensity << 6) | (shadow << 3) | variant;
     }
 </script>
 
@@ -45,7 +82,7 @@
                 </div>
                 <strong>Variant</strong>
                 <div class="area_output">
-                    <div class="output_result">{variant.toString(16).padStart(3, '0')}</div>
+                    <div class="output_result">{variant_total.toString(16).padStart(3, '0')}</div>
                     <button on:click={copy_to_clipboard}>
                         <Fa icon={faCopy} />
                         <span>Copy</span>
@@ -56,31 +93,45 @@
         <div class="grid-contents selector">
             <div class="grid-content">
                 <strong>Base Type</strong>
-                <button>
-                    <span id="collide_type">{base_type}</span>
+                <button class="option-main">
+                    <span id="collide_type">{base_type_label}</span>
                     <Fa icon={faChevronDown} style="margin: auto 0 auto auto" />
                 </button>
             </div>
             <div class="grid-content">
                 <strong>Basic Variant</strong>
-                <button>
-                    <span id="variant_type">{variant_type}</span>
+                <button class="option-main">
+                    <span id="variant_type">{variant_type_label}</span>
                     <Fa icon={faChevronDown} style="margin: auto 0 auto auto" />
                 </button>
             </div>
             <div class="grid-content">
-                <strong>Shadow</strong>
-                <button>
-                    <span id="shadow">0</span>
-                    <Fa icon={faChevronDown} style="margin: auto 0 auto auto" />
-                </button>
-            </div>
-            <div class="grid-content">
-                <strong>Intensity</strong>
-                <button>
-                    <span id="intensity">0</span>
-                    <Fa icon={faChevronDown} style="margin: auto 0 auto auto" />
-                </button>
+                <div class="numeric-grid">
+                    <div>
+                        <strong>Shadow</strong>
+                        <div class="option-main numeric">
+                            <button on:click={() => calc_shadow('-')}>
+                                <Fa icon={faChevronLeft} />
+                            </button>
+                            <span id="shadow">{shadow}</span>
+                            <button on:click={() => calc_shadow('+')}>
+                                <Fa icon={faChevronRight} />
+                            </button>
+                        </div>
+                    </div>
+                    <div>
+                        <strong>Intensity</strong>
+                        <div class="option-main numeric">
+                            <button on:click={() => calc_intensity('-')}>
+                                <Fa icon={faChevronLeft} />
+                            </button>
+                            <span id="intensity">{intensity}</span>
+                            <button on:click={() => calc_intensity('+')}>
+                                <Fa icon={faChevronRight} />
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -167,6 +218,12 @@
             gap: 1.4rem;
         }
 
+        .numeric-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            column-gap: 1.3rem;
+        }
+
         strong {
             position: relative;
             z-index: 1000;
@@ -180,7 +237,7 @@
             display: flex;
             // width: 300px;
             // max-width: 300px;
-            margin: 0.3rem 0 0.9rem 0;
+            margin: 0.3rem 0 1.3rem 0;
             background-color: $color-output-bg;
             padding: 0.6rem;
             border-radius: 0.3rem;
@@ -230,8 +287,23 @@
             padding: 0.96rem 1.1rem;
             background-color: $color-selector-bg;
 
-            button {
+            button.option-main {
                 cursor: pointer;
+
+                &:hover {
+                    background-color: $color-selector-button-bg-hover;
+                    border-color: $color-selector-button-border-hover;
+                    color: $color-selector-button-border-hover;
+                }
+
+                &:active {
+                    background-color: $color-selector-button-bg;
+                    border-color: $color-selector-button-active;
+                    color: $color-selector-button-active;
+                }
+            }
+
+            .option-main {
                 position: relative;
                 display: flex;
                 margin: 0.3rem 0;
@@ -247,16 +319,31 @@
                 color: $color-selector-button-text;
                 background-color: $color-selector-button-bg;
 
-                &:hover {
-                    background-color: $color-selector-button-bg-hover;
-                    border-color: $color-selector-button-border-hover;
-                    color: $color-selector-button-border-hover;
-                }
+                &.numeric {
+                    width: auto;
+                    position: relative;
+                    padding: 0;
 
-                &:active {
-                    background-color: $color-selector-button-bg;
-                    border-color: $color-selector-button-active;
-                    color: $color-selector-button-active;
+                    span {
+                        margin: 0 auto;
+                        padding: 0.6rem;
+                    }
+
+                    button {
+                        cursor: pointer;
+                        padding: 0 1rem;
+                        transition: background-color 0.1s linear, color 0.1s linear;
+
+                        &:hover {
+                            background-color: $color-selector-button-bg-hover;
+                            color: $color-selector-button-border-hover;
+                        }
+
+                        &:active {
+                            background-color: $color-selector-button-bg;
+                            color: $color-selector-button-active;
+                        }
+                    }
                 }
             }
         }
