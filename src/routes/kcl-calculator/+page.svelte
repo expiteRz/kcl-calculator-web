@@ -20,14 +20,23 @@
     let base_type_label = 'Road';
     let variant_type_label = 'Normal';
 
-    async function copy_to_clipboard() {
+    async function copy_to_clipboard(flag: string) {
+        let encoded: string;
+        switch (flag) {
+            case 'variant':
+                encoded = variant_total.toString(16).padStart(3, '0').toUpperCase();
+            default: // Result
+                encoded = result.toString(16).padStart(4, '0').toUpperCase();
+                break;
+        }
+
         if (navigator.clipboard) {
-            return await navigator.clipboard.writeText(result.toString(16).padStart(4, '0'));
+            return await navigator.clipboard.writeText(encoded);
         }
 
         const app = new CopyToClipboard({
             target: document.getElementById('clipboard')!,
-            props: { result: result.toString(16).padStart(4, '0') }
+            props: { result: encoded }
         });
         app.$destroy();
     }
@@ -65,70 +74,76 @@
 </script>
 
 <div class="_kcl-calc">
-    <div class="title">
-        KCL Flag Calculator
-        <span class="version {app_version.includes('dev') ? 'dev' : ''}">{app_version}</span>
-    </div>
-    <div class="grid-container">
-        <div class="grid-contents -output">
-            <div class="grid-content">
-                <strong>Result</strong>
-                <div class="area_output">
-                    <div class="output_result">{result.toString(16).padStart(4, '0')}</div>
-                    <button on:click={copy_to_clipboard}>
-                        <Fa icon={faCopy} />
-                        <span>Copy</span>
-                    </button>
-                </div>
-                <strong>Variant</strong>
-                <div class="area_output">
-                    <div class="output_result">{variant_total.toString(16).padStart(3, '0')}</div>
-                    <button on:click={copy_to_clipboard}>
-                        <Fa icon={faCopy} />
-                        <span>Copy</span>
-                    </button>
-                </div>
-            </div>
+    <div class="main-container">
+        <div class="title">
+            KCL Flag Calculator
+            <span class="version {app_version.includes('dev') ? 'dev' : ''}">{app_version}</span>
         </div>
-        <div class="grid-contents selector">
-            <div class="grid-content">
-                <strong>Base Type</strong>
-                <button class="option-main">
-                    <span id="collide_type">{base_type_label}</span>
-                    <Fa icon={faChevronDown} style="margin: auto 0 auto auto" />
-                </button>
-            </div>
-            <div class="grid-content">
-                <strong>Basic Variant</strong>
-                <button class="option-main">
-                    <span id="variant_type">{variant_type_label}</span>
-                    <Fa icon={faChevronDown} style="margin: auto 0 auto auto" />
-                </button>
-            </div>
-            <div class="grid-content">
-                <div class="numeric-grid">
-                    <div>
-                        <strong>Shadow</strong>
-                        <div class="option-main numeric">
-                            <button on:click={() => calc_shadow('-')}>
-                                <Fa icon={faChevronLeft} />
-                            </button>
-                            <span id="shadow">{shadow}</span>
-                            <button on:click={() => calc_shadow('+')}>
-                                <Fa icon={faChevronRight} />
-                            </button>
+        <div class="grid-container">
+            <div class="grid-contents -output">
+                <div class="grid-content">
+                    <strong>Result</strong>
+                    <div class="area_output">
+                        <div class="output_result">
+                            {result.toString(16).padStart(4, '0').toUpperCase()}
                         </div>
+                        <button on:click={() => copy_to_clipboard('result')}>
+                            <Fa icon={faCopy} />
+                            <span>Copy</span>
+                        </button>
                     </div>
-                    <div>
-                        <strong>Intensity</strong>
-                        <div class="option-main numeric">
-                            <button on:click={() => calc_intensity('-')}>
-                                <Fa icon={faChevronLeft} />
-                            </button>
-                            <span id="intensity">{intensity}</span>
-                            <button on:click={() => calc_intensity('+')}>
-                                <Fa icon={faChevronRight} />
-                            </button>
+                    <strong>Variant</strong>
+                    <div class="area_output">
+                        <div class="output_result">
+                            {variant_total.toString(16).padStart(3, '0').toUpperCase()}
+                        </div>
+                        <button on:click={() => copy_to_clipboard('variant')}>
+                            <Fa icon={faCopy} />
+                            <span>Copy</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="grid-contents selector">
+                <div class="grid-content">
+                    <strong>Base Type</strong>
+                    <button class="option-main">
+                        <span id="collide_type">{base_type_label}</span>
+                        <Fa icon={faChevronDown} style="margin: auto 0 auto auto" />
+                    </button>
+                </div>
+                <div class="grid-content">
+                    <strong>Basic Variant</strong>
+                    <button class="option-main">
+                        <span id="variant_type">{variant_type_label}</span>
+                        <Fa icon={faChevronDown} style="margin: auto 0 auto auto" />
+                    </button>
+                </div>
+                <div class="grid-content">
+                    <div class="numeric-grid">
+                        <div>
+                            <strong>Shadow</strong>
+                            <div class="option-main numeric">
+                                <button on:click={() => calc_shadow('-')}>
+                                    <Fa icon={faChevronLeft} />
+                                </button>
+                                <span id="shadow">{shadow}</span>
+                                <button on:click={() => calc_shadow('+')}>
+                                    <Fa icon={faChevronRight} />
+                                </button>
+                            </div>
+                        </div>
+                        <div>
+                            <strong>Intensity</strong>
+                            <div class="option-main numeric">
+                                <button on:click={() => calc_intensity('-')}>
+                                    <Fa icon={faChevronLeft} />
+                                </button>
+                                <span id="intensity">{intensity}</span>
+                                <button on:click={() => calc_intensity('+')}>
+                                    <Fa icon={faChevronRight} />
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -159,13 +174,18 @@
     ._kcl-calc {
         position: relative;
         display: block;
-        width: 700px;
+        width: 100%;
+        max-width: 430px;
         margin: 0 auto;
-        top: 3rem;
-        padding: 2rem;
+        top: 4rem;
+        // padding: 2rem;
         background-color: $color-main-bg;
         border-radius: 0.4rem;
         box-shadow: 0 0 2rem $color-main-shadow;
+
+        @media (min-width: 700px) {
+            max-width: 700px;
+        }
 
         /* --- Reset any elements default style --- */
         button {
@@ -177,6 +197,10 @@
             background: none;
         }
         /* End --- Reset any elements default style --- */
+
+        .main-container {
+            padding: 1.3rem;
+        }
 
         .title {
             font-size: x-large;
@@ -208,8 +232,14 @@
         .grid-container {
             margin-top: 1.3rem;
             display: grid;
-            grid-template-columns: 14rem 1fr;
+            grid-template-columns: 1fr;
             column-gap: 1.7rem;
+        }
+
+        @media (min-width: 700px) {
+            .grid-container {
+                grid-template-columns: 14rem 1fr;
+            }
         }
 
         .grid-contents {
@@ -286,6 +316,7 @@
             border-radius: 0.4rem;
             padding: 0.96rem 1.1rem;
             background-color: $color-selector-bg;
+            row-gap: .8rem;
 
             button.option-main {
                 cursor: pointer;

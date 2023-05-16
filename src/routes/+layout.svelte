@@ -1,10 +1,21 @@
-<script>
+<script lang="ts">
     import '@fontsource/poppins';
     import ZRNav from './Nav.svelte';
+    import { page } from '$app/stores';
+
+    let game: string;
+    switch ($page.url.pathname) {
+        case '/kcl-calculator':
+            game = 'mkw';
+            break;
+        default:
+            game = '';
+            break;
+    }
 </script>
 
+<ZRNav {game} />
 <div class="_ZR">
-    <ZRNav />
     <slot />
 </div>
 
@@ -17,5 +28,9 @@
         font-family: 'Poppins', sans-serif;
         background-color: $color-bg;
         color: white;
+    }
+
+    ._ZR {
+        margin: 0 1rem;
     }
 </style>
