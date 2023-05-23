@@ -14,11 +14,12 @@
     let base_type: number = 0;
     let variant_total: number = 0;
     let variant: number = 0;
+    let effect_total: number = 0;
     let shadow: number = 0;
     let intensity: number = 0;
 
-    let base_type_label = 'Road';
-    let variant_type_label = 'Normal';
+    let base_type_label = 'Road'; // Temporarily stored
+    let variant_type_label = 'Normal'; // Temporarily stored
 
     async function copy_to_clipboard(flag: string) {
         let encoded: string;
@@ -39,6 +40,12 @@
             props: { result: encoded }
         });
         app.$destroy();
+    }
+
+    function calc_result() {
+        result =
+            (effect_total << 13) | (intensity << 11) | (shadow << 8) | (variant << 5) | base_type;
+        variant_total = (effect_total << 8) | (intensity << 6) | (shadow << 3) | variant;
     }
 
     function calc_shadow(flag: string) {
@@ -67,9 +74,25 @@
         calc_result();
     }
 
-    function calc_result() {
-        result = (intensity << 11) | (shadow << 8) | (variant << 5) | base_type;
-        variant_total = (intensity << 6) | (shadow << 3) | variant;
+    function set_effects(flag: number = -1) {
+        switch (flag) {
+            case 0:
+                // !(effect_total && 0b001) ? (effect_total |= 0b001) : (effect_total ^= 0b001);
+                effect_total ^= 0b001;
+                break;
+            case 1:
+                // !(effect_total && 0b010) ? (effect_total |= 0b010) : (effect_total ^= 0b101);
+                effect_total ^= 0b010;
+                break;
+            case 2:
+                // !(effect_total && 0b100) ? (effect_total |= 0b100) : (effect_total ^= 0b011);
+                effect_total ^= 0b100;
+                break;
+            default:
+                break;
+        }
+        calc_result();
+        console.log(effect_total.toString(2));
     }
 </script>
 
@@ -126,9 +149,15 @@
                 <div class="grid-content">
                     <strong>Collision Type</strong>
                     <div class="option-main numeric multiple-set">
-                        <button>Trickable</button>
-                        <button>Undrivable</button>
-                        <button>Wall</button>
+                        <button class:enabled={effect_total & 0b001} on:click={() => set_effects(0)}
+                            >Trickable</button
+                        >
+                        <button class:enabled={effect_total & 0b010} on:click={() => set_effects(1)}
+                            >Undrivable</button
+                        >
+                        <button class:enabled={effect_total & 0b100} on:click={() => set_effects(2)}
+                            >Wall</button
+                        >
                     </div>
                 </div>
                 <div class="grid-content">
@@ -181,6 +210,7 @@
     $color-selector-button-text: hsl(207deg, 28%, 76%);
     $color-selector-button-bg: hsla(207deg, 21%, 12%, 0.4);
     $color-selector-button-bg-hover: hsla(207deg, 21%, 23%);
+    $color-selector-button-bg-hover-override: hsla(207deg, 23%, 30%);
     $color-selector-bg: hsl(207deg, 20%, 21%);
 
     ._kcl-calc {
@@ -407,6 +437,21 @@
 
                     button {
                         padding: 0.6rem 0;
+
+                        &.enabled {
+                            background-color: $color-selector-button-bg-hover;
+                            color: $color-selector-button-border-hover;
+
+                            &:hover {
+                                background-color: $color-selector-button-bg-hover-override;
+                                color: $color-selector-button-border-hover;
+                            }
+
+                            &:active {
+                                background-color: $color-selector-button-bg;
+                                color: $color-selector-button-active;
+                            }
+                        }
                     }
                 }
             }
