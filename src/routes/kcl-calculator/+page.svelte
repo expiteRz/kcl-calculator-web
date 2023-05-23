@@ -73,6 +73,10 @@
     }
 </script>
 
+<svelte:head>
+    <title>KCL Flag Calculator | app.rz-public.xyz</title>
+</svelte:head>
+
 <div class="_kcl-calc">
     <div class="main-container">
         <div class="title">
@@ -118,6 +122,14 @@
                         <span id="variant_type">{variant_type_label}</span>
                         <Fa icon={faChevronDown} style="margin: auto 0 auto auto" />
                     </button>
+                </div>
+                <div class="grid-content">
+                    <strong>Collision Type</strong>
+                    <div class="option-main numeric multiple-set">
+                        <button>Trickable</button>
+                        <button>Undrivable</button>
+                        <button>Wall</button>
+                    </div>
                 </div>
                 <div class="grid-content">
                     <div class="numeric-grid">
@@ -316,7 +328,7 @@
             border-radius: 0.4rem;
             padding: 0.96rem 1.1rem;
             background-color: $color-selector-bg;
-            row-gap: .8rem;
+            row-gap: 0.8rem;
 
             button.option-main {
                 cursor: pointer;
@@ -350,6 +362,18 @@
                 color: $color-selector-button-text;
                 background-color: $color-selector-button-bg;
 
+                span {
+                    transition: color 0.1s linear;
+                }
+
+                &:hover {
+                    border: 0.1rem solid $color-selector-button-border-hover;
+
+                    span {
+                        color: $color-selector-button-border-hover;
+                    }
+                }
+
                 &.numeric {
                     width: auto;
                     position: relative;
@@ -374,6 +398,15 @@
                             background-color: $color-selector-button-bg;
                             color: $color-selector-button-active;
                         }
+                    }
+                }
+
+                &.multiple-set {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr 1fr;
+
+                    button {
+                        padding: 0.6rem 0;
                     }
                 }
             }
